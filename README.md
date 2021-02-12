@@ -124,3 +124,16 @@ sparse。可能就是需要这种spatial graph
 ```
 ![](ImplicitRelation.png)
 
+3.分Explicit Relation
+1）semantic relation encoder
+因为这里有labels+directions，所以我们这里有注意仔细设计，对于方向的敏感性。
+![](ReGATExplicit.png)
+
+### 训练就是
+将每个最后的visual和q进行combine predict，然后就是我们的三个GAT都是独立训练的，然后最后我们就是使用加权融合分数。
+
+### 实验结果
+这里就是每一种relation都是有意义的，然后最后的结果证明这种graph之前就进行了combine query的也是可以improve结果的，这个可以当作是Q-adaptive.
+
+
+

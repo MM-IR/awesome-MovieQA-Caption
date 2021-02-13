@@ -136,4 +136,24 @@ sparse。可能就是需要这种spatial graph
 这里就是每一种relation都是有意义的，然后最后的结果证明这种graph之前就进行了combine query的也是可以improve结果的，这个可以当作是Q-adaptive.
 
 
+## 1.Adaptive Graph Representation Learning for Video Person Re-identification@2019TIP
+Person Re-id 就是目的是从gallery里面使用一个person of interest作为输入的query，然后准确检索对应的identities。
+### 1.现有方法的工作:
+1.许多existing methods就是首先frame-level的feature，然后video-level的feature则是通过temporal aggregation来进行产生的。然后将它们放在一个particular metric space里进行对比。
+
+2.尽管深度学习取得了很多成功，但是事实上occlusion/viewpoints/illumination/pose variation在video中的问题还是很显著的。
+为了解决这个问题，现有的方法就是使用image region-attention来获取feature。**但是这类方法往往不能处理好那种有特殊情况的场景，比如occlusion/pose variations的场景，intrinsic relations between person parts across frames。而这个在robust video表达上还是比较有意义的。
+*比如，如果body parts在第一个frame里是occluded的，那么appearance cues and contextual information就是比较有意义的@complementary。*
+因此，如果自适应表现关系建模以及上下文信息的传播among spatial regions是一个关键的issue。**
+
+### 因此我们的工作
+1.我们创建两个relations named pose alignment connection以及对应的feature affinity relation。@时空regions。
+
+1）pose alignment connection: 这里就是across frames的spatial regions@包含相同身体部分的就align在一起了。
+
+2）feature affinity connection: 这些特征的相关性。（visually semantic relationships）
+
+2.这就是上面的两个graph根据GNN建模，就会将regional feature的informative增强，noise减少啦。
+
+3.同时对于长视频而言，可能只有部分关键frame就可以代表所有的视频信息了.(consistency among different temporal resolutions).
 

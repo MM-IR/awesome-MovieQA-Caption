@@ -157,3 +157,121 @@ Person Re-id 就是目的是从gallery里面使用一个person of interest作为
 
 3.同时对于长视频而言，可能只有部分关键frame就可以代表所有的视频信息了.(consistency among different temporal resolutions).
 
+
+# BiST: Bi-directional Spatio-Temporal Reasoning for Video-Grounded Dialogues@2020EMNLP，适合我的第三份工作@hop=1，很奇怪
+Video-grounded Dialogues是非常有挑战性的，因为:
+
+1) complexity of videos contain both spatial and temporal variations(时间和空间上的变化);
+
+2) complexity of user utterances用户的言论which query different segments and/or different objects in videos over multiple dialogue turns~
+
+## Motivation:
+1.现有的网络仅仅专注于superficial temporal-level visual cues,但是忽略了更finegrained的spatial signals～（不仅探索了both spatial and temporal-level的信息，而且learn dynamic information diffusion扩散 between the two feature spaces通过spatial-to-temporal和temporal-to-spatial推理～）
+
+**我们的策略就是bidirectional的@tackle the evolving semantics of user queries in the dialogue setting～**
+
+## Large Margin over TGIF-QA SOTA
+
+## Introduction说的Motivation
+1.“where to look”+“when to look”这里就是spatial reasoning+temporal reasoning～
+
+2.但是现在的很多方法仅仅是忽视了spatial features并且假设each spatial region对于current task而言是同等重要的（uniform weight）。这种方法呢就比较适合video involves 少量的objects以及spatial positions can be treated similarly～**但是，事实上许多scenario，each video frame包含了多个distinct objects然后并不是所有的他们都和question有关～**
+
+3.那么我们的工作很大部分上就受到了一些关于时空推理的工作的影响～
+
+## 不过现有的工作的有这样的缺陷
+比起专注于处理空间输入然后处理temporal inputs~我们就是注意到in some cases，更实际的是首先识别相关的video segments在定位到specific subjects of interest之前。那么考虑到问题in a dialogue setting，问题很可能是和varying temporal locations of the video有关而不是仅仅small fixed segment～（那么我们这里就是探索了一个双向的vision-language reasoning）
+
+## 我们的这个双流推理结构的核心优势
+1.spatial-temporal reasoning就是更加适合human queries related to specific entities或者有关多个objects的视频～
+
+2.temporal-spatial reasoning就是更加适合human queries about a particular video segment或者videos of extensive lengths～
+
+## 可以精读本文中所涵盖的Spatio-Temporal Learning有关的～
+
+## 关于本文的BiST Model
+![](BiST.jpg)
+
+### 1.关于Problem Formulation
+这里就是输入包括当前的Video，t-1 turns的dialogue（按照human utterance H+dialogue agent response A来进行排列组合）(H1,A1,...,H_(t-1),A_(t-1))以及当前的human utterance H_t.
+
+输入的视频包括features in不同的模态，包括视觉，audio以及text（比如caption或者subtitle）
+### 3.1.1 Text Encoders（自己训练）
+positional encoding+token-level embedding@element-wise summation+layer norm
+
+这里就是针对dialogue history/user query/video caption/target response～
+
+### 3.1.2 Video Encoder（这里就是fixed直接extract）
+1.这里就是我们还是clip extraction，获得的3D-CNN的feature将其+linear-ReLU+layer norm-》减少feature dimension～
+
+2.audio feature这里就是follow similar procedure@Fxd。
+
+### 3.2. Bi-directional Reasoning
+#### 3.2.1. Temporal-》Spatial
+1.这里的第一个步骤就是针对3D CNN获得的每个spatial region上的特征～（进行一个weighted sum）
+
+2.这里就是query对temporal上的softmax weighted sum～+FC+ReLU。
+![](TemporallyAttended.jpg)
+这个图片就是关于Temporally Attended Features。
+这里就是最后将其和language feature进行skip connection～@Z_(t2s)^t.
+
+3.然后就是user query又一次应用起来去搞这个dependencies along the spatial dimension～
+这里还是一样的softmax weighted sum，那么看起来这次就有了不一样的套路啦～
+
+#### 3.2.2. Spatial-》Temporal
+这里的操作还是一样的～
+
+![](FinalReasoning.jpg)
+这里就是final reasoning对应的特征
+
+#### 对自己framework的总结
+1.这里就是咱们的这个是allow neural models to diffuse information from these feature spaces in两个不同的方式～
+
+2.那么我们的方法就是local and global signals，我们的方法就是使得global-to-local 以及local-to-global来获取diffusion of visual cues in video～
+
+#### 3.3. Multimodal Reasoning
+相似的，我们还考虑了language-audio reasoning/language-language reasoning。（相似的计算流程）
+
+#### 3.4. Multimodal Fusion
+就是获得了这些attended features之后，我们combine这些query-guided video representation～@（合并information from 所有的模态～）
+
+这里就是question-guided feature fusion，如果audio features不重要，那么就不会参与问题～
+
+### TGIF-QA Results
+这里就是我们的模型使用ResNeXt3D的结果表现比ResNet要好，我想这里的一个很主要的原因就是sequence-level feature is more consistent than frame-level feature。
+
+## Impact of Spatio-temporal Learning
+这里的实验结果就是temporal-spatial learning的效果比spatio-temporal learning的好～这个可能就是multi-turn setting，each turn都关于不同的relevant video segment，以及我们的video一般会比较长～
+
+4.那么我们的工作很大部分上就受到了一些关于时空推理的工作的影响～#
+5.那么我们的工作很大部分上就受到了一些关于时空推理的工作的影响～#
+6.那么我们的工作很大部分上就受到了一些关于时空推理的工
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

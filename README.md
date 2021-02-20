@@ -243,10 +243,133 @@ positional encoding+token-level embedding@element-wise summation+layer norm
 ## Impact of Spatio-temporal Learning
 这里的实验结果就是temporal-spatial learning的效果比spatio-temporal learning的好～这个可能就是multi-turn setting，each turn都关于不同的relevant video segment，以及我们的video一般会比较长～
 
-4.那么我们的工作很大部分上就受到了一些关于时空推理的工作的影响～#
-5.那么我们的工作很大部分上就受到了一些关于时空推理的工作的影响～#
-6.那么我们的工作很大部分上就受到了一些关于时空推理的工
 
+# Where Does It Exist: Spatio-Temporal Video Grounding for Multi-Form Sentences
+localize the spatio-temporal tube of the queried object.
+## 这个任务的难点:
+1.我们需要从untrimmed videos中进行定位，这个object可能仅仅在small segments中～
+
+2.我们需要处理multi-form sentences，比如declarative sentences with explicit objects+interrogative sentences with unknown objects
+
+## Motivation
+1.现有的STVG task不能好好建模因为tube pre-generation做的不好+缺乏object relationship modeling～
+
+## 我们的Contributions
+1.我们这里就是spatio-temporal region graph@capture region关系 with temporal object dynamics～
+**这个graph包括了implicit spatial graph and explicit spatial graph in each frame还有temporal dynamic subgraph across frames～**
+*我们这里就是将textual clues into the graph～*
+
+2.我们介绍了一个spatio-temporal localizer@dynamic选择to directly 检索spatio-temporal tubes without tube pre-generation。
+
+## 现有的工作的缺陷
+1.existing video grounding方法often extract a set of时空tubes from trimmed videos然后识别target tube that matches the sentence～（但是这个框架不适合STVG，因为这方法很看重咱们pre-generate的tube candidates的quality～**existing pre-generation framework can only produce complete object tubes from trimmed videos**
+
+2.其他，这些方法仅仅考虑single tube modeling以及忽视了objects的关系～**尤其是interrogative sentences that may only offer the interactions of the unknown objects with other objects～**
+
+## 我们的方法
+**我们提出的是Spatio-Temporal Graph Reasoning Network(STGRN)捕捉temporal object dynamics + 直接定位时空tubes without tube pregeneration～**
+
+1.我们将视频解析成a spatio-temporal region graph。（以前的工作visual graph仅仅建模frame中的spatial graph，我们的则考虑了each frame中implicit and explicit spatial subgraph，但还考虑了temporal dynamic subgraph～
+
+![](STGRN.jpg)
+
+### 3.1. Video and Text Encoder
+Faster-RCNN@each frame,(where a video contains N frames and the t-th frame corresponds to K regions~)@(+bbx features)~
+
+question@bigru+entity attention(聚合邻居的信息～)
+
+### 3.2. Spatio-Temporal Graph Encoder
+1.这个就是每个frame都有两种graph，包括implicit spatial subgraph以及explicit spatial subgraph～@each frame～
+
+2.然后还有一个temporal dynamic subgraph across frames～
+
+这三种graph的vertexes都是regions，然后有不同的边～（同时每个都有self-loop）
+
+#### 3.2.1 Implicit Spatial Graph
+unlabeled edges in each frame～@每个frame（全连接图）
+
+#### 3.2.2 Explicit Spatial Graph
+1.这里就是使用relation classifier来对这个进行分类～region i的特征是什么的，还有region j的feature以及两者union bbx的特征～
+
+2.就是使用三个不同的linear将这些feature进行transform，然后concatenate一起分类层@predict the relations～**我们在classifier on the Visual Genome dataset训练了这个分类器，我们选择了top-50 frequent predicates in its training data然后增加一个extra no_relation class for non-existent edges~**(我们预测了relationship)
+
+3.最后就是edges就是有3个directions，i-to-j,j-to-i,i-i.
+
+#### 3.2.3 Temporal Dynamic Graph
+temporal graph@capture the dynamics and transformation of objects across frames.所以我们就是需要connect the regions containing the same object@不同的frames。
+
+**这里就是对于每个frame t，我们就是连接its regions with相邻的2M frames(M for forward frames and M for backward)**
+
+我们的linking score计算的方式是这样的
+
+![](LinkScore.jpg)
+
+这里就是我们同时考虑appearance similarity and spatial overlap ratio of two regions，然后temporal dynamic distance用来limit the IoU score。那么对于distant frames，linking score主要就是根据feature similarity而决定的。
+
+@@@Temporal Dynamic Graph就是三个edge（forward/backward/self-loop～）
+
+2M+1 edge for each region～（**我们设置的M=5**）
+
+## 3.3. Multi-step Cross-Modal Graph Reasoning
+### 3.3.1 Cross-Modal Fusion
+这里就是为了capture the relationships associate with the sentence，我们首先使用一个cross-modal fusion@动态将textual evidences 映射到spatio-temporal graph～
+
+1.我们这里就是针对每个visual region对sentence的每个word进行attention计算。然后weighted sum～
+
+我们就是使用一个textual gate+question两者拼接在一起表示（filtered region feature and textual feature 去obtain the cross-modal region features）这个学习的每个node的question表达则是基于BiLSTm的结果～
+
+![](Textualgate.jpg)
+
+### 3.3.2 Spatial Graph Convolution
+**Implicit Graph Convolution**
+这里就是和GAT有些相似，但是这里采取的是特征相似性进行attn～
+
+![](ImplicitSpatial.jpg)
+
+**Explicit Graph Convolution**
+不同于原来的undirected GCN，我们这里就是考虑了direction和label information of edges～
+
+这个边就是relation，所以我们的edge就是单纯由question进行softmax@51个类～
+然后就是根据有向图的方式更新node feature～
+
+### 3.3.3 Temporal Graph Convolution（无方向性）
+这里就是我们develop the temporal 图卷积 on the directed and unlabeled graph。
+这里和implicit graph一样的计算方式～特征相似性的attn～
+
+### 3.3.4 combine这些卷积
+sum然后ReLU～
+
+（这里的融合是针对每个align的进行融合的）
+
+## 3.4. Spatio-Temporal Localizer
+我们设计一个spatio-temporal localizer to determine the temporal tube边界以及spatio-temporal tubes of objects from the region label～
+
+**Temporal Localizer**: 
+这个就是estimate a set of candidate clips and调整他们的boundary to obtain the temporal grounding～
+
+1.first aggregate the relation-aware region graph@frame level by 注意力机制～
+2.with the query表达，region features of each frame are attended by:
+
+
+```
+1.首先我们获得关系aware的region graph into the frame level@@注意力机制～
+
+2.这里就是获得对于每个frame的feature@guided by our query～
+```
+![](TemporalLocalizer.jpg)
+
+这里就是我们获得relation-aware feature of frame t。我们然后将其concatenate with 他们的corresponding global frame拼接在一起然后通过一个BiGRU获得final frame feature～
+**每个hidden state**
+
+这个就是最后的针对每个query和visual region都计算一下loss～
+
+
+
+
+
+2.我们需要处理multi-form sentences，比如declarative sentences with explicit objects+interrogative sentences with unknown objects#¥
+2.我们需要处理multi-form sentences，比如declarative sentences with explicit objects+interrogative sentences with unknown objects#
+2.我们需要处理multi-form sentences，比如declarative sentences with explicit objects+interrogative sentences with unknown objects
 
 
 

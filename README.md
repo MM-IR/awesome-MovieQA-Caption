@@ -363,6 +363,13 @@ sum然后ReLU～
 
 这个就是最后的针对每个query和visual region都计算一下loss～
 
+# Learning Reasoning Paths over Semantic Graphs for Video-Grounded Dialogues
+## Motivation:
+
+# Temporal Relational Reasoning in Videos
+我们这里就是提出一个有效而且interpretable 的网络模块，叫做Temporal Relation Module(sparsely sampled video frame可以取得很好的结果)
+## Motivation:
+1.
 
 
 

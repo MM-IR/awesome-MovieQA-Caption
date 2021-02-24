@@ -371,6 +371,17 @@ sum然后ReLU～
 ## Motivation:
 1.
 
+# *Core*
+# Erasing-based Attention Learning for Visual Question Answering@MM19，改进attention注意力机制的一个策略，后期建议深刻学习
+## Motivation:
+1.我们就是attn和non-attn之间区分一下就好了@attn和non-attn parts分开的比较好～（而不是简单的attn）
+2.这里就是结合咱们的loss学习more discriminative attention map～
+3.并没有额外的参数，可以和任何attn model放在一起combine。
+
+咱们这个soft attn事实上不是desired，这里就是说错误的原先的attn学习的应该注意的和不应该注意的距离应该增加一下。
+
+![](Eraseattn.jpg)
+
 
 
 

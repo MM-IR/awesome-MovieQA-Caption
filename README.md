@@ -382,6 +382,19 @@ sum然后ReLU～
 
 ![](Eraseattn.jpg)
 
+# Multi-interaction Network with Object Relation for Video Question Answering@MM19
+## Motivation:
+1.主要的工作就是尝试使用CNN或者RNN来capture spatial-temporal features+attn；
+2.我们的这里就是做一个multi-interaction model，主要包括了两种interaction:
+
+1)multi-modal interaction between the visual and textual information;
+
+2)multi-level interaction inside the multi-modal interaction.@(**新的multi-interaction比起self-attn，我们可以同时建模element-wise和segment-WISE的特征interaction**)
+
+**这里比起normal frame-level interaction，我们还考虑了object relation～**
+
+![](Multiinteraction.jpg)
+
 
 
 

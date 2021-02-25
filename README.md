@@ -371,6 +371,83 @@ sum然后ReLU～
 ## Motivation:
 1.
 
+# Video Question Answering via Hierarchical Dual-Level Attention Network Learning@MM2017-可以学习表达如何同时搞image和video
+## Motivation:
+1.关键信息可能只是存在于一部分frames里，所以使用temporal attention是很常见的；
+
+2。对于视频理解而言除了image的appearance还应该要motion对应的feature，所以需要同时利用segment-level的和image-level的。
+
+![](HierarchicalDual.jpg)
+
+# 1.Dual Hierarchical Temporal Convolutional Network with QA-Aware Dynamic Normalization for Video Story QUestion Answrring
+## 1.Motivation:
+1.现有的方法有这么几个常见的defects:
+
+1)single temporal scale;@就是不同的问题可能需要不同的temporal scales来搞呢。。。
+
+2)static and rough multimodal interaction;
+
+3)对于question和answer choices信息利用的不够充分～
+
+2.我们的方法是怎么解决以上问题的呢？@Dual Hierarchical Temporal Convolutional Network(DHTCN)
+
+1)多个temporal scales@建模层次化的时间卷积网络；
+
+2)在每个时间卷积网络中，我们都有两个关键的模块，AttLSTM和QA-Aware Dynamic Normalization去捕捉这个temporal dependency以及multimodal interaction@（以一个动态和finegrained角度）
+
+3）为了充分探索问题和答案有关的信息，我们这里就是增加了QA pairs的深度@通过一系列堆叠的非线性层～
+
+![](DualPath.jpg)
+
+## encoder
+这里的feature encoder很有趣的，visual feature就是ImageNet的3fps feature，textual feature就是Bert+一系列简单操作～
+
+## 3.2. Multimodal Alignment + Temporal Modeling
+这里就是使用Multihead Attn操作subtitle和video，然后就是BiLSTM来建模temporal dependency～
+
+## 3.3. QA-aware Dyanmic Normalization
+
+## 3.4。 时序卷机
+这里就是直接获得多个level的，然后根据QA pairs获得attn-based embedding～
+
+# 2.Video Dialog via Multi-Grained Convolutional Self-Attention Context Networks@MM19@Core
+## Motivation
+1.dialogue history一般都是用RNN来建模，可是事实上video和dialogue data都是十分variable的，因此我们认为RNN可能不是一个很好的选择～
+
+2.视频中关于一些动作啊什么的都是使用的是dynamic attributes of video are usually included in several frame segments instead of a single frame.@(**所以原始的self-attention的方法仅仅考虑element-wise interaction不太现实**)
+
+3.那么我们的设计就是同时考虑element and segment level interactions～@(**multi-grained sequence information**)
+
+![](Multigrain.jpg)
+
+## 我们的方法
+关于上述的3，就是层次性dialog history@(**context-aware question representation**), (**two-stream video encoder**)
+
+## 1.Encoder
+这里就是frame-level的frame feature；还有clip-level的motion feature～
+还有就是dialog history的textual feature+answer对应的feature～
+
+## 2.Multi-grained Convolutional Self-attention
+这里就是接受word embedding对应的句子或者video frames作为输入，
+
+1）首先是self-attn
+
+2）然后就是使用segment-wise的1D卷积作为encoding@长度为segment对应的长度l@看作是原始的segment～得到的P作为local-interacted feature sequence
+
+3）接着继续进行segment-wise的self-attn～
+
+最后就是融合local-interacted和global-interacted的feature作为最后的结果～
+
+![](segin.jpg)
+
+接着就是三方面的特征进行融合。
+![](FusionPhase.jpg)
+
+## Experimentation
+关于实验部分，我们这里的结果就是设计的这个单元很有效～
+
+然后self-attn对应的结果的个数是一个超参数@我们有认真进行调节～
+
 # *Core*
 # Erasing-based Attention Learning for Visual Question Answering@MM19，改进attention注意力机制的一个策略，后期建议深刻学习
 ## Motivation:

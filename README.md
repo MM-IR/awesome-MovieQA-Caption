@@ -379,6 +379,8 @@ sum然后ReLU～
 
 ![](HierarchicalDual.jpg)
 
+
+
 # 1.Dual Hierarchical Temporal Convolutional Network with QA-Aware Dynamic Normalization for Video Story QUestion Answrring
 ## 1.Motivation:
 1.现有的方法有这么几个常见的defects:

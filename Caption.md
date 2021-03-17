@@ -296,8 +296,25 @@ NetVLAD证明了他局部encoding的能力，使用一个trainable VLAD。**aggr
 
 2。object-aware aggregation: VLAD on object temporal trajectories+global frame temporal sequences.+层次attn。
 
+# 11。Semantic Grouping Network for Video Captioning
+## Motivation
+1.视频中的信息比较多，而且是分块的。consecutive frames usually do not provide独特信息，因此我们不是应该考虑每一个frame。而是尝试理解视频根据一系列的semantic units～
 
+# 2021 AAAI: 12. Dynamic Graph Representation Learning for Video Dialog via Multi-Modal Shuffled Transformers
+## Motivation
+1.这里就是audio-video dialog。这里就是一些模态的输入可能会提供互补的信息比如video和audio，但是其他的可能会是独立的，又或者是相互冲突的。比如**captions/dialogs**
 
+那么我们这里的问题就是如何有效表达这些多模态特征。之前的方法都容易suboptimal performance。
+
+![](AVSD.jpg)
+
+## 关于咱们的Visual graph。
+首先是visual graph 就是Visual Genome上的object detector训练的visual feature结合GAT作为当前frame的fetaure。然后Semantic Scene Graph就是使用EdgeConv来计算edge做一个graph。
+
+最后就是GAP+GMP得到对应的frame级别的fetaure。
+
+## Inter-Frame Aggregation
+这里做的就是sliding window，每个window都用attention做一次工作。
 
 
 

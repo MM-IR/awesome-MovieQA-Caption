@@ -256,12 +256,51 @@ c) FUNC module: 根据现有的language context。我们生成function words～
 1.现有的主流的视频caption 遭受到slow inference speed由于sequential manner of autoregressive decoding。
 
 
+# 10.Object-aware Aggregation with Bidirectional Temporal Graph for Video Captioning
+## Motivation@用一句话来表示比较重要。
+1.生成accurate and fine-grained captions needs to not only理解整个视频的内容，还需要capture detailed object information。
 
-# 9.Non-Autoregressive Coarse-to-Fine Video Captioning视频
-# 9.Non-Autoregressive Coarse-
+**除以以外，视频表达对于生成的captions的质量有很大的影响。**
 
-# 7.Learning to Discretely Compose Reasoning Module Network for Video Captioning#
-# 7.Learning to Discretely Compose Reasoning Module Network for Video Captioning
+2。因此，对于video caption而言捕捉salient objects和他们对应的temporal dynamics，然后使用discriminative spatio-temporal representations。
+
+## 我们的技术的简单介绍。object-aware local feature aggregation on detected object regions.
+1.主要的优势是这样的:
+
+1)Bidirectional temporal graph: 这里就是along and reversely along the temporal order来提供互补的信息to capture the temporal trajectories for each salient object。
+
+2)object-aware aggregation: Learnable VLAD 就是来construct on object-temporal trajectories and global frame sequences。**表演object-aware aggregation to learn 判别性的表达**
+
+3）层次attention就是来distinguish 不同的objects的贡献的。
+
+![](BTG.jpg)
+
+## 1.Introduction介绍
+之前的方法探索temporal information of video content 通过temporal attention mechanism或者hierarchical encoder-decoder structures。
+但是用例子来证明我们对于某个object来进行分析是十分重要的。
+
+2.**除以以外，视频表达对于生成的captions的质量有很大的影响。**. 因此，如何使用discriminative spatio-temporal representations对于视频描述而言是重要的。
+
+可是许多工作都仅仅是使用global features on video frames from FC layer或者全局池化layer。这个可能会丢失许多fine spatial information～
+
+NetVLAD证明了他局部encoding的能力，使用一个trainable VLAD。**aggregate the local features to encode local spatial information～**
+
+接着it，SeqVLAD就是combine the trainable VLAD encoding model with 序列学习process，探索both local spatial information和temporal information。
+
+**但是上面的方法并没有探索object-specific information**
+
+## 主要的创新点
+1.Bidirectional Temporal Graph: 双向temporal graph 创建来salient objects和global frames去捕捉detailed temporal dynamics in video～
+
+这个就是按照一个互补的方式双向来探索each salient object instance。
+
+2。object-aware aggregation: VLAD on object temporal trajectories+global frame temporal sequences.+层次attn。
+
+
+
+
+
+
 
 
 

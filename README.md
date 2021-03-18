@@ -475,11 +475,17 @@ sum然后ReLU～
 ![](Multiinteraction.jpg)
 
 
+# Graph-based Multi-interaction Network for Video QA@TIP2021
+
+这里就是基于上面那篇做了一个简单的Graph Network而已
+
+![](GMInteraction.jpg)
+
+![](Graphical.jpg)
+
+自己设置的边和节点的更新方式～
 
 
-2.我们需要处理multi-form sentences，比如declarative sentences with explicit objects+interrogative sentences with unknown objects#¥
-2.我们需要处理multi-form sentences，比如declarative sentences with explicit objects+interrogative sentences with unknown objects#
-2.我们需要处理multi-form sentences，比如declarative sentences with explicit objects+interrogative sentences with unknown objects
 
 
 

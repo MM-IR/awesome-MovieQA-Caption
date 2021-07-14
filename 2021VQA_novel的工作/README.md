@@ -4,6 +4,9 @@
 >我们针对的是VQA模型的out-of-distribution的问题。VQA模型需要measure generalization to novel questions.
 
 ## idea
+>这个表达就是说我们想要说人们要想拥有很强大的回答的问题能力，我们一般是解析这个subquestion，然后能够回答subquestion，那么组合起来的能力就很强大。skills and concepts。
+
+
 1.我们额想法就是把这个问题进行分组以及分解。比如question的话就是有skills以及concepts，skills呢就是visual tasks，比如counting或者attribute recognition。concepts就是questionb中提到的比如objects以及people。
 
 2.VQA模型呢就是需要compose skills and concepts in novel ways, 而不管这个whether the specific composition has been seen in training.**我们需要很好combine，而且不需要管这个training的风格**

@@ -15,3 +15,8 @@
 
 我们这里就是使用一个对比学习的方法，现有的实验证明我们的effectiveness of our approach。
 
+>我们这里就是使用grounding as a proxy to separate concepts so that the model learns to identify a concept in both the question and image, regardless of the specific context.
+
+>1.我们这里还参照弱监督的grounding, 来训练一个model去recover a concept mentioned in a given image-question pair 通过对比这个masked concept word的表达以及words in other questions的表达。
+
+<img width="436" alt="image" src="https://user-images.githubusercontent.com/40928887/125573980-8debad66-618a-452e-8b9b-3e0c52efd20e.png">
